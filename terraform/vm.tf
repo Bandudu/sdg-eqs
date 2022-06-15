@@ -1,4 +1,4 @@
-# Creación de 4 maquinas virtuales. Se crean a traves de la iteracion count mediante la declaracion en el archivo vars.tf de la variable vm_iteration
+# Creación de maquinas virtuales. Se crean a traves de la iteracion count mediante la declaracion en el archivo vars.tf de la variable vm_iteration
 # Se utiliza el valor del index para darle un nombre diferente a cada una de las maquinas asi como las ip publica y tarjeta de red.
 
 resource "azurerm_linux_virtual_machine" "eqsVM" {
@@ -11,7 +11,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
     admin_username      = var.ssh_user
     network_interface_ids = [azurerm_network_interface.eqsNics[count.index].id]
     disable_password_authentication = true
-
+    
     admin_ssh_key {
         username   = "adminUsername"
         public_key = file(var.public_key_path)
@@ -40,17 +40,6 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
         storage_account_uri = azurerm_storage_account.stAccount.primary_blob_endpoint
     }
 
-    provisioner "file" {
-      source =   "${var.public_key_path}"
-      destination = "~/.ssh/authorized_keys"
-    }
-    user_data = <<HEREDOC
-    #cloud-config
-
-    hostname: ${var.vm_iteration[count.index]}.eqs-unir.es
-    manage_etc_hosts: True
-
-  HEREDOC
     tags = {
         environment = "CP2"
     }

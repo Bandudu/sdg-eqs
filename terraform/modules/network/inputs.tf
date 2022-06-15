@@ -17,6 +17,8 @@ variable "subnet_group_name" {}
 variable "cidr_subnet" {
   default = ["10.0.1.0/24"]
 }
+variable "vm_iteration" {}
+
 
 
 

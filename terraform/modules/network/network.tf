@@ -18,7 +18,6 @@ resource "azurerm_subnet" "eqsSubnet" {
     address_prefixes       = var.cidr_subnet
 
 }
-#TO-DO COntinuar por aqui
 
 # IP pública
 # Se crean 4 ips publicas para asigarlas a cada una de las maquinas.
@@ -26,13 +25,13 @@ resource "azurerm_subnet" "eqsSubnet" {
 resource "azurerm_public_ip" "eqsPublicIp" {
   count               = length(var.vm_iteration)
   name                = "vmip-${count.index + 1}"
-  location            = azurerm_resource_group.rg_eqs.location
-  resource_group_name = azurerm_resource_group.rg_eqs.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   allocation_method   = "Dynamic"
   sku                 = "Basic"
 
     tags = {
-        environment = "CP2"
+        environment = var.environment
     }
 
 }
@@ -44,8 +43,8 @@ resource "azurerm_public_ip" "eqsPublicIp" {
 resource "azurerm_network_interface" "eqsNics" {
   count               = length(var.vm_iteration)
   name                = "vmnic-${count.index + 1}"  
-  location            = azurerm_resource_group.rg_eqs.location
-  resource_group_name = azurerm_resource_group.rg_eqs.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
     ip_configuration {
     name                           = "eqsipconfiguration${count.index + 1}"
@@ -56,7 +55,7 @@ resource "azurerm_network_interface" "eqsNics" {
   }
 
     tags = {
-        environment = "CP2"
+        environment = var.environment
     }
 
 }
