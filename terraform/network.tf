@@ -1,24 +1,33 @@
 # Creación de la red
 resource "azurerm_virtual_network" "eqsNet" {
-    name                = var.net_name
-    address_space       = var.cidr_gen
-    location            = var.location
-    resource_group_name = var.resource_group_name
+    name                = "kubernetesnet"
+    address_space       = ["10.0.0.0/16"]
+    location            = azurerm_resource_group.rg_eqs.location
+    resource_group_name = azurerm_resource_group.rg_eqs.name
 
     tags = {
-        environment = var.environment
+        environment = "Testing"
     }
 }
 
 # Creación de subred en la que estaran las máquinas. Se crea una máscara /24 debido a que es suficiente para que funcione la practica sin problemas sin realizar subnetting
 resource "azurerm_subnet" "eqsSubnet" {
-    name                   = var.subnet_group_name
-    resource_group_name    = var.resource_group_name
+    name                   = "subneteqs"
+    resource_group_name    = azurerm_resource_group.rg_eqs.name
     virtual_network_name   = azurerm_virtual_network.eqsNet.name
-    address_prefixes       = var.cidr_subnet
+    address_prefixes       = ["10.0.1.0/24"]
 
 }
-#TO-DO COntinuar por aqui
+
+
+# Creación de subred en la que estaran las máquinas. Se crea una máscara /24 debido a que es suficiente para que funcione la practica sin problemas sin realizar subnetting
+resource "azurerm_subnet" "eqsSubnet2" {
+    name                   = "subneteqs2"
+    resource_group_name    = azurerm_resource_group.rg_eqs.name
+    virtual_network_name   = azurerm_virtual_network.eqsNet.name
+    address_prefixes       = ["10.0.2.0/24"]
+
+}
 
 # IP pública
 # Se crean 4 ips publicas para asigarlas a cada una de las maquinas.
@@ -32,7 +41,7 @@ resource "azurerm_public_ip" "eqsPublicIp" {
   sku                 = "Basic"
 
     tags = {
-        environment = "CP2"
+        environment = "Testing"
     }
 
 }
@@ -56,7 +65,7 @@ resource "azurerm_network_interface" "eqsNics" {
   }
 
     tags = {
-        environment = "CP2"
+        environment = "Testing"
     }
 
 }

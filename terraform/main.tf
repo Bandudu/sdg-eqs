@@ -1,3 +1,4 @@
+
 #Provider en el que se indica que el despliegue se realizará en Azure
 terraform {
   required_providers {
