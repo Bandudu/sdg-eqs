@@ -1,4 +1,5 @@
 module "network_eqs" {
+    net_name = "kubernetesnet"
     source = "./modules/network"
     cidr_gen = ["10.0.0.0/16"]
     location = azurerm_resource_group.rg_eqs.location

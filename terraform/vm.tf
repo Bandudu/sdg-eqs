@@ -9,7 +9,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
     location            = azurerm_resource_group.rg_eqs.location
     size                = var.vm_size
     admin_username      = var.ssh_user
-    network_interface_ids = [azurerm_network_interface.eqsNics[count.index].id]
+    network_interface_ids = [network_eqs.azurerm_network_interface.eqsNics[count.index].id]
     disable_password_authentication = true
     
     admin_ssh_key {
@@ -33,7 +33,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
         publisher = "cognosys"
         offer     = "centos-8-stream-free"
         sku       = "centos-8-stream-free"
-        version   = "1.2019.0810"
+        version   = "22.03.28"
     }
 
     boot_diagnostics {
@@ -41,7 +41,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
     }
 
     tags = {
-        environment = "CP2"
+        environment = var.environment
     }
 
 }

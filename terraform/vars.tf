@@ -8,5 +8,6 @@ variable "vm_size" {
 variable "vm_iteration" {
   type = list(string)
   description = "Maquinas virutales"
-  default = ["master", "worker1", "worker2", "nfs"]
+  default = ["master", "worker1"]
+  #default = ["master", "worker1", "worker2", "nfs"]
 }

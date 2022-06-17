@@ -1,0 +1,37 @@
+---
+
+- name: Configuramos kubeadm
+  shell: kubeadm config images pull
+
+- name: Instalamos el plugin CNI de kubernetes y definimos la red de los PODs
+  shell: kubeadm init --pod-network-cidr 10.0.2.0/24
+  
+
+- name: Almacenamos comando join
+  become: yes
+  shell: kubeadm token create --print-join-command
+  register: kudeadm_init
+
+- name: Almacenamos el comando join para que sea accesible
+  set_fact: 
+    kube_jcommand="{{ kudeadm_init.stdout }}"
+
+- name: Imprimimos variable kube_jcommand
+  debug:
+    msg: "{{ hostvars['master.eqs-sdg.com']['kudeadm_init'] }}"
+
+- name: Configuramos para que root pueda utilizar kubectl 
+  shell: "export KUBECONFIG=/etc/kubernetes/admin.conf"
+
+- name: autorizar al usuario root acceder al cluster creamdo el directorio .kube
+  file:
+    path: /root/.kube
+    state: directory
+    mode: 0755
+
+- name: Copiamos la configuracion
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+

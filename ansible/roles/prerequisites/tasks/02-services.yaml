@@ -1,0 +1,26 @@
+---
+
+- name: Habilitando Servicios
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    masked: no
+  become: yes
+  with_items:
+    - "chronyd"
+    - "firewalld"
+
+- name: Activamos el NTP
+  become: yes
+  shell: timedatectl set-ntp true
+
+- name: Desactivamos SELinux
+  shell: setenforce 0
+  ignore_errors: yes
+
+- name: Desactivamos SELinux en caso de reinicio
+  selinux:
+    state: disabled
+
+

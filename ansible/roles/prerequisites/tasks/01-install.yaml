@@ -1,0 +1,12 @@
+---
+
+- name: Configurar Zona horaria
+  timezone:
+    name: Europe/Madrid 
+  become: yes
+
+- name: Instalando prerequisitos
+  dnf:
+    name: "{{ services_init }}"
+    state: present
+  become: yes

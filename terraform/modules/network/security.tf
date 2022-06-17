@@ -19,7 +19,7 @@ resource "azurerm_network_security_group" "eqsSecGroup" {
     }
 
     tags = {
-        environment = "CP2"
+        environment = var.environment
     }
 }
 

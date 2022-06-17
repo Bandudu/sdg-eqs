@@ -1,0 +1,4 @@
+---
+
+- name: Se crea {{ namespace }} namespace
+  shell: kubectl create namespace {{ namespace }}

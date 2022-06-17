@@ -1,0 +1,37 @@
+---
+
+- name: Creacion de usuario kubeadmin
+  user:
+    name: "{{ username }}"
+    create_home: yes
+    password: "{{ username | password_hash('sha512') }}"
+
+- name: Creacion de directorio kube
+  file: 
+    path: /home/{{ username }}/.kube
+    state: directory
+
+- name: Copiado de la configuracion de kubernetes
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: /home/{{ username }}/.kube/config
+
+- name: Cambio de permisos del fichero admin.conf
+  file:
+    path: /home/{{ username }}/.kube/config
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Adicion del usuario al grupo sudoers
+  file:
+    path: /etc/sudoers.d/{{ username }}
+    state: touch
+
+- name: Permiso para ejecutar sudo sin credenciales
+  lineinfile:
+    dest: /etc/sudoers.d/{{ username }}
+    state: present
+    regexp: '^%{{ username }}' 
+    line: '%{{ username }} ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'

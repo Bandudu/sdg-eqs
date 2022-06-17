@@ -1,0 +1,5 @@
+---
+
+#Descargar el fichero canal.yaml
+- name: Descargamos el siguiente fichero para el sdn
+  shell: kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml
