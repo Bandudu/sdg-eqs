@@ -1,0 +1,12 @@
+---
+
+- name: configurando firewall
+  firewalld:
+    service: "{{ item }}"
+    permanent: 'true'
+    immediate: yes
+    state: enabled    
+  with_items:
+    - "nfs"
+    - "rpc-bind"
+    - "mountd"

@@ -1,0 +1,4 @@
+#Variables para el despliegue de la aplicacion
+namespace: helloworld
+appname: helloworld
+image_app: nginxdemos/hello

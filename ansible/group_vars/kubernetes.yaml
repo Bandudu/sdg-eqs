@@ -1,0 +1,8 @@
+master_public_ip: 20.101.51.124
+nfs_public_ip: 20.101.51.124
+worker01_public_ip: 20.105.147.117
+
+master_private_ip: 10.0.1.10
+nfs_private_ip: 10.0.1.10
+worker01_private_ip: 10.0.1.11
+username: kubeadmin

@@ -1,0 +1,2 @@
+services_init: ['chrony', 'nfs-utils', 'nfs4-acl-tools', 'wget']
+services_nfs: ['nfs-utils', 'net-tools']

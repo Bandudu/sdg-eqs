@@ -1,0 +1,86 @@
+---
+- name: Modificacion del fichero /etc/hosts
+  blockinfile: 
+    path: /etc/hosts 
+    state: present
+    block: |
+      {{ nfs_private_ip }}  nfs.eqs-sdg.com
+      {{ master_private_ip }}  master.eqs-sdg.com
+      {{ worker01_private_ip }}  worker01.eqs-sdg.com
+    insertafter: EOF
+    marker: "## {mark} DNS Servers"
+
+- name: Cargamos el modulo br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Habilitamos masquerade en el firewall
+  firewalld:
+    masquerade: yes
+    state: enabled
+    permanent: 'True'
+    immediate: yes
+
+- name: configuramos net.bridge.bridge-nf-call-ip6tables a 1
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: '1'
+    state: present
+
+- name: configuramos net.bridge.bridge-nf-call-iptables a 1
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    state: present
+
+- name: Desactivamos SWAP 
+  shell: |
+    swapoff -a
+
+- name: Desactivamos SWAP en fstab 
+  lineinfile:
+    path: /etc/fstab
+    regexp: 'swap'
+    state: absent
+
+- name: Añadimos repositorio docker
+  shell: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Instalamos docker
+  dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce-20.10.6-3.el8
+
+- name: Arrancamos Docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Configuramos el repositorio de kubernetes
+  yum_repository:
+    name: Kubernetes
+    description: Kubernetes YUM repository
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    gpgcheck: yes
+
+- name: Instalamos kubernetes (kubelet) 
+  yum:
+    name: kubelet
+    state: present
+    update_cache: true
+
+- name: Instalamos kubernetes (kubeadm)
+  yum:
+    name: kubeadm
+    state: present
+
+- name: Instalamos kubernetes (kubectl)
+  yum:
+    name: kubectl
+    state: present
+

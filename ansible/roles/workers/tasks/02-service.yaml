@@ -1,0 +1,6 @@
+---
+
+- name: Ejecucion de comando join en los worker
+  become: yes
+  ignore_errors: true
+  shell: "{{ hostvars['master.eqs-sdg.com']['kube_jcommand'] }} --ignore-preflight-errors Swap"

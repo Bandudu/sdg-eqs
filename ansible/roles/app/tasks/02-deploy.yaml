@@ -1,0 +1,43 @@
+- name: configurando worker
+  shell: kubectl patch node eqs-vm-worker1 -p '{"spec":{"podCIDR":"10.0.2.0/24"}}'
+
+- name: Creacion de directorio app
+  file: 
+    path: /etc/app
+    state: directory
+
+- name: Se crea fichero de despliegue
+  become: yes
+  file:
+    path: /etc/app/app.yaml
+    state: touch
+  
+- name: Introducimos la configuracion de despliegue al fichero
+  blockinfile:
+    path: /etc/app/app.yaml
+    block: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: {{ appname }}
+        namespace: {{ namespace }}
+        labels:
+          app: {{ appname }}
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: {{ appname }}
+        template:
+          metadata:
+            labels:
+              app: {{ appname }}
+          spec:
+            containers:
+            - name: {{ appname }}
+              image: {{ image_app }}
+              ports:
+              - containerPort: 80
+  
+- name: Deploy App
+  shell: kubectl apply -f /etc/app/app.yaml 

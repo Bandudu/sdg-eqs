@@ -1,0 +1,17 @@
+---
+
+- name: configurando puerto 10250
+  firewalld:
+    zone: public
+    port: 10250/tcp
+    permanent: 'true'
+    immediate: yes
+    state: enabled
+
+- name: configurando puertos 30000-32767
+  firewalld:
+    zone: public
+    port: 30000-32767/tcp
+    permanent: 'true'
+    immediate: yes
+    state: enabled
