@@ -33,7 +33,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
         publisher = "cognosys"
         offer     = "centos-8-stream-free"
         sku       = "centos-8-stream-free"
-        version   = "1.2019.0810"
+        version   = "22.03.28"
     }
 
     boot_diagnostics {

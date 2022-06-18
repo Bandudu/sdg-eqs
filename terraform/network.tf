@@ -6,7 +6,7 @@ resource "azurerm_virtual_network" "eqsNet" {
     resource_group_name = azurerm_resource_group.rg_eqs.name
 
     tags = {
-        environment = "Testing"
+        environment = var.environment
     }
 }
 
@@ -41,7 +41,7 @@ resource "azurerm_public_ip" "eqsPublicIp" {
   sku                 = "Basic"
 
     tags = {
-        environment = "Testing"
+        environment = var.environment
     }
 
 }
@@ -65,7 +65,7 @@ resource "azurerm_network_interface" "eqsNics" {
   }
 
     tags = {
-        environment = "Testing"
+        environment = var.environment
     }
 
 }

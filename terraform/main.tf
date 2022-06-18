@@ -15,7 +15,7 @@ resource "azurerm_resource_group" "rg_eqs" {
     location = var.location
 
     tags = {
-        environment = "Testing"
+        environment = var.environment
     }
 
 }
@@ -29,7 +29,7 @@ resource "azurerm_storage_account" "stAccount" {
     account_replication_type = "LRS"
 
     tags = {
-        environment = "Testing"
+        environment = var.environment
     }
 
 }
