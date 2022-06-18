@@ -9,7 +9,7 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
     location            = azurerm_resource_group.rg_eqs.location
     size                = var.vm_size
     admin_username      = var.ssh_user
-    network_interface_ids = [network_eqs.azurerm_network_interface.eqsNics[count.index].id]
+    network_interface_ids = [module.network_eqs.my_network[count.index].id_nic]
     disable_password_authentication = true
     
     admin_ssh_key {
