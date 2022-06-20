@@ -7,7 +7,7 @@ module "network_eqs" {
     environment = var.environment
     
     #Subnets
-    subnet_group_name = "cp2subneteqs"
+    subnet_group_name = "subneteqs"
     cidr_subnet = ["10.0.1.0/24"]
     vm_iteration = var.vm_iteration
 }

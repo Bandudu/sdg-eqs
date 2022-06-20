@@ -10,7 +10,7 @@ terraform {
 
 #Creacion del grupo de recursos
 resource "azurerm_resource_group" "rg_eqs" {
-    name     =  "kubernetes_rg_eqs"
+    name     =  "kubet_rg_eqs"
     location = var.location
 
     tags = {
