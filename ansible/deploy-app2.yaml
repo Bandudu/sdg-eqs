@@ -1,0 +1,9 @@
+---
+
+- hosts: master
+  vars_files:
+    - "group_vars/app2.yaml"
+  gather_facts: true
+  become: yes
+  roles:
+    - app2

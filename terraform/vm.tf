@@ -23,17 +23,11 @@ resource "azurerm_linux_virtual_machine" "eqsVM" {
         storage_account_type = "Standard_LRS"
     }
 
-    plan {
-        name      = "centos-8-stream-free"
-        product   = "centos-8-stream-free"
-        publisher = "cognosys"
-    }
-
     source_image_reference {
-        publisher = "cognosys"
-        offer     = "centos-8-stream-free"
-        sku       = "centos-8-stream-free"
-        version   = "22.03.28"
+        publisher = "Canonical"
+        offer     = "0001-com-ubuntu-server-focal"
+        sku       = "20_04-lts"
+        version   = "20.04.202004230"
     }
 
     boot_diagnostics {

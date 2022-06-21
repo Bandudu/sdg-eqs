@@ -4,7 +4,6 @@
     path: /etc/hosts 
     state: present
     block: |
-      {{ nfs_private_ip }}  nfs.eqs-sdg.com
       {{ master_private_ip }}  master.eqs-sdg.com
       {{ worker01_private_ip }}  worker01.eqs-sdg.com
     insertafter: EOF
@@ -14,13 +13,6 @@
   modprobe:
     name: br_netfilter
     state: present
-
-- name: Habilitamos masquerade en el firewall
-  firewalld:
-    masquerade: yes
-    state: enabled
-    permanent: 'True'
-    immediate: yes
 
 - name: configuramos net.bridge.bridge-nf-call-ip6tables a 1
   sysctl:
@@ -44,15 +36,38 @@
     regexp: 'swap'
     state: absent
 
+- name: Instalamos paquetes necesarios
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Añadimos GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
 - name: Añadimos repositorio docker
-  shell: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
 
 - name: Instalamos docker
-  dnf:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - docker-ce-20.10.6-3.el8
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Instalamos modulo de docker para pyhton
+  pip:
+    name: docker
 
 - name: Arrancamos Docker
   service:
@@ -60,27 +75,36 @@
     state: started
     enabled: true
 
-- name: Configuramos el repositorio de kubernetes
-  yum_repository:
-    name: Kubernetes
-    description: Kubernetes YUM repository
-    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    gpgcheck: yes
+- name: Download apt key
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /tmp # or /etc/pki/rpm-gpg depending on the infrastructure
+
+- name: Add a key from a file
+  ansible.builtin.apt_key:
+    file: /tmp/apt-key.gpg
+    state: present
+
+- name: add Kubernetes APT repository
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: 'kubernetes'
+    update_cache: true
 
 - name: Instalamos kubernetes (kubelet) 
-  yum:
+  apt:
     name: kubelet
     state: present
     update_cache: true
 
 - name: Instalamos kubernetes (kubeadm)
-  yum:
+  apt:
     name: kubeadm
     state: present
 
 - name: Instalamos kubernetes (kubectl)
-  yum:
+  apt:
     name: kubectl
     state: present
 

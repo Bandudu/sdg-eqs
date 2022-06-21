@@ -1,0 +1,4 @@
+#Variables para el despliegue de la aplicacion
+namespace: docker-airflow
+appname: docker-airflow
+image_app: puckel/docker-airflow

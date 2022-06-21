@@ -1,6 +1,5 @@
 ---
 
-- include_tasks: 01-firewall.yaml
 - include_tasks: 02-service.yaml
 - include_tasks: 03-sdn.yaml
 - include_tasks: 04-ingress-controller.yaml

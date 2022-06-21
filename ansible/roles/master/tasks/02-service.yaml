@@ -1,8 +1,4 @@
 ---
-
-- name: Configuramos kubeadm
-  shell: kubeadm config images pull
-
 - name: Instalamos el plugin CNI de kubernetes y definimos la red de los PODs
   shell: kubeadm init --pod-network-cidr 10.0.2.0/24
   

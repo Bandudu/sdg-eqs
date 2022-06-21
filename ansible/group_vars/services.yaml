@@ -1,2 +1,1 @@
-services_init: ['chrony', 'nfs-utils', 'nfs4-acl-tools', 'wget']
-services_nfs: ['nfs-utils', 'net-tools']
+services_init: ['chrony', 'wget', "selinux-basics", "selinux-policy-default", "auditd"]

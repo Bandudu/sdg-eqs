@@ -1,0 +1,10 @@
+[all:vars]
+ansible_user=adminUsername
+ansible_interpreter=/usr/bin/python3
+
+[master]
+master.eqs-sdg.com
+
+[workers]
+worker01.eqs-sdg.com
+

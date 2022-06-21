@@ -9,15 +9,6 @@
   roles:
     - prerequisites
 
-- hosts: master
-  vars_files:
-    - "group_vars/kubernetes.yaml"
-    - "group_vars/services.yaml"
-  gather_facts: true
-  become: yes
-  roles:
-    - nfs
-
 - hosts: all
   vars_files:
     - "group_vars/kubernetes.yaml"

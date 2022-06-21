@@ -21,6 +21,7 @@ output "my_network" {
         id_nic = data.azurerm_network_interface.nicsEqs[k].id
         private_ip = azurerm_network_interface.eqsNics[k].private_ip_address
         public_ip = data.azurerm_public_ip.public_ip[k].ip_address
+        public_ip_name = azurerm_public_ip.eqsPublicIp[k].name
     }
 
   }

@@ -1,0 +1,25 @@
+- name: Creacion de directorio app
+  file: 
+    path: /etc/app2
+    state: directory
+
+
+
+- name: Clone a github repository
+  git:
+    repo: https://github.com/ipeluffo/airflow-on-kubernetes.git
+    dest: /etc/app2/
+    clone: yes
+    update: yes
+    
+- name: Copiamos el script
+  copy:
+    src: /mnt/e/e/SDG/sdg-eqs/ansible/roles/app2/assets/start.sh
+    dest: /etc/app2/
+    owner: adminUsername 
+    mode: 777
+  become: yes
+
+
+- name: Ejecutamos script despliegue 
+  shell: "sh /etc/app2/start.sh"

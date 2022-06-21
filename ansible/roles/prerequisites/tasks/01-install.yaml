@@ -5,8 +5,11 @@
     name: Europe/Madrid 
   become: yes
 
+- name: Actualizando repos y cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
 - name: Instalando prerequisitos
-  dnf:
+  apt:
     name: "{{ services_init }}"
     state: present
   become: yes
